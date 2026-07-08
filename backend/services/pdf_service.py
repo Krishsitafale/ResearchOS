@@ -8,6 +8,7 @@ Responsible for:
 - Extracting text
 """
 
+from annotated_types import doc
 import fitz
 
 from backend.core.logger import logger
@@ -51,3 +52,15 @@ class PDFService:
         )
 
         return text
+    
+    def page_count(self, pdf_path: str):
+
+        import fitz
+
+        doc = fitz.open(pdf_path)
+
+        pages = len(doc)
+
+        doc.close()
+
+        return pages

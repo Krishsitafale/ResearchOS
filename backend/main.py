@@ -7,6 +7,7 @@ from backend.core.logger import logger
 from backend.api.routes.upload import router as upload_router
 from backend.api.routes.search import router as search_router
 from backend.api.routes.chat import router as chat_router
+from backend.database.init_db import initialize_database
 
 
 app = FastAPI(
@@ -18,6 +19,8 @@ app = FastAPI(
     description="Production AI Research Assistant"
 
 )
+
+initialize_database()
 
 # --------------------------------------------------
 

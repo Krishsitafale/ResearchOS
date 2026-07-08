@@ -15,6 +15,7 @@ from backend.core.logger import logger
 
 from backend.services.chunk_service import ChunkService
 from backend.services.pdf_service import PDFService
+from backend.services.metadata_service import MetadataService
 
 router = APIRouter()
 
@@ -32,6 +33,8 @@ UPLOAD_DIRECTORY.mkdir(
 pdf_service = PDFService()
 
 chunk_service = ChunkService()
+
+metadata_service = MetadataService()
 
 # --------------------------------------------------------
 
@@ -99,6 +102,13 @@ async def upload_pdf(
         extracted_text
     )
 
+    document_id = metadata_service.save_document(
+    filename=file.filename,
+        filepath=str(destination),
+        total_pages=pdf_service.page_count(str(destination)),
+        chunks=chunks,
+    )
+    
     logger.info(
         f"Generated {len(chunks)} chunks."
     )
@@ -125,7 +135,7 @@ async def upload_pdf(
     )
 
     vector_store.save()
-    
+
     bm25_service.build_index()
 
     logger.info(
